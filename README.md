@@ -1,7 +1,14 @@
 ### 작업환경
 OS : Mac OS Monterey
 
-python: python 3.9.7<br><br>
+python: python 3.9.7
+
+java: java 11
+
+    url: https://www.azul.com/downloads/?version=java-11-lts&os=macos&architecture=arm-64-bit&package=jdk
+
+<br>
+
 
 ### 사용한 LIB
 
