@@ -37,8 +37,6 @@ def main():
 
     # pdf 작성
     output = PdfFileWriter()
-    # pyPDF2를 통해 pdf를 읽어옴(merge용)
-    exist_pdf = PdfFileReader(current_path + '/Seller Center1.pdf')
 
     # 폰트 설정
     pdfmetrics.registerFont(TTFont("D2Coding", "D2Coding.ttf"))
@@ -119,20 +117,23 @@ def main():
         # 변수 0으로 초기화
         idx = 0
 
+        # pyPDF2를 통해 pdf를 읽어옴(merge용)
+        exist_pdf = PdfFileReader('{}/{}.pdf'.format(current_path, baseName))
+
         pages = pdfplumber.open('{}/{}.pdf'.format(current_path, baseName)).pages
 
         for pageNum, page in enumerate(pages):
             # 텍스트를 추출하여 송장 감지
             texts = page.extract_text()
-            checkInvoice = regex.search(texts)
+            check_invoice = regex.search(texts)
 
-            if checkInvoice is not None:
-                queryOrder = "SELECT orderSku FROM ORDERSKU WHERE orderNumber like '{}'".format(order_numbers[idx])
-                df = spark.sql(queryOrder)
+            if check_invoice is not None:
+                query_order = "SELECT orderSku FROM ORDERSKU WHERE orderNumber like '{}'".format(order_numbers[idx])
+                df = spark.sql(query_order)
                 products = {}
                 for row in df.rdd.collect():
-                    querySKU = "SELECT * FROM SKU WHERE NAME like '%{}%'".format(row.orderSku)
-                    df2 = spark.sql(querySKU)
+                    query_sku = "SELECT * FROM SKU WHERE NAME like '%{}%'".format(row.orderSku)
+                    df2 = spark.sql(query_sku)
                     try:
                         print(df2.rdd.take(1))
                         row_data = df2.rdd.take(1)[0]
@@ -153,26 +154,26 @@ def main():
 
                 i = 0  # 딕셔너리 index
                 for key, value in products.items():
-                    posY = 587.5 - (11 * math.floor(i / 3))  # text y축
-                    posX = 8  # text x축
+                    pos_y = 587.5 - (11 * math.floor(i / 3))  # text y축
+                    pos_x = 8  # text x축
                     if i % 3 == 0:
-                        posX = 8
+                        pos_x = 8
                     elif i % 3 == 1:
-                        posX = 100
+                        pos_x = 100
                     else:
-                        posX = 192
+                        pos_x = 192
 
-                    writeText = '{} {}'.format(key, value)
-                    if len(writeText) < 15:
+                    write_text = '{} {}'.format(key, value)
+                    if len(write_text) < 15:
                         can.setFont("D2Coding", 8)  # 폰트종류: D2Coding, 폰트크기: 8
-                    elif len(writeText) >= 15 & len(writeText) < 17:
+                    elif len(write_text) >= 15 & len(write_text) < 17:
                         can.setFont("D2Coding", 7)  # 폰트종류: D2Coding, 폰트크기: 7
-                    elif len(writeText) >= 17 & len(writeText) < 19:
+                    elif len(write_text) >= 17 & len(write_text) < 19:
                         can.setFont("D2Coding", 6)  # 폰트종류: D2Coding, 폰트크기: 6
                     else:
                         can.setFont("D2Coding", 5)  # 폰트종류: D2Coding, 폰트크기: 5
 
-                    can.drawString(posX, posY, writeText)
+                    can.drawString(pos_x, pos_y, write_text)
                     i = i + 1
 
                 can.save()
