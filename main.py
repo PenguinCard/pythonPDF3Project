@@ -35,9 +35,6 @@ def main():
     # 파일리스트 가져오기
     files = os.listdir()
 
-    # pdf 작성
-    output = PdfFileWriter()
-
     # 폰트 설정
     pdfmetrics.registerFont(TTFont("D2Coding", "D2Coding.ttf"))
 
@@ -96,7 +93,6 @@ def main():
 
     for pdf_file in pdf_files:
         baseName = re.sub(r"\.pdf", "", pdf_file)
-        print(baseName)
 
         # html 파일을 읽어온 뒤 태그로 추출할 수 있는 형태로 변환
         html = open('{}/{}.html'.format(current_path, baseName), 'rt', encoding='utf-8').read()
@@ -119,6 +115,8 @@ def main():
 
         # pyPDF2를 통해 pdf를 읽어옴(merge용)
         exist_pdf = PdfFileReader('{}/{}.pdf'.format(current_path, baseName))
+        # pdf 작성
+        output = PdfFileWriter()
 
         pages = pdfplumber.open('{}/{}.pdf'.format(current_path, baseName)).pages
 
