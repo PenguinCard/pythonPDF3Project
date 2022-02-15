@@ -67,7 +67,7 @@ def main():
             order_number = str(sheet["M{}".format(idx)].value)
             # text 정렬작업
             text = str(sheet["F{}".format(idx)].value)
-            text = re.sub(r'\s1', '', text)
+            text = re.sub(r'\)\s1', ')', text)
             text = re.sub(r'\(\d{4}\)|[+]', ',', text)
             text = text.strip()
             texts = text.split(',')
