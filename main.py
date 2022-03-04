@@ -155,16 +155,10 @@ def main():
 
                 i = 0  # 딕셔너리 index
                 for key, value in products.items():
-                    pos_y = 587.5 - (11 * math.floor(i / 3))  # text y축
-                    pos_x = 8                                 # text x축
-                    if i % 3 == 0:
-                        pos_x = 8
-                    elif i % 3 == 1:
-                        pos_x = 100
-                    else:
-                        pos_x = 192
 
                     write_text = '{} {}'.format(key, value)
+
+                    print(len(write_text))
                     if len(write_text) < 15:
                         can.setFont("D2Coding", 8)  # 폰트종류: D2Coding, 폰트크기: 8
                     elif len(write_text) >= 15 & len(write_text) < 17:
@@ -174,8 +168,21 @@ def main():
                     else:
                         can.setFont("D2Coding", 5)  # 폰트종류: D2Coding, 폰트크기: 5
 
+                    pos_y = 587.5 - (11 * math.floor(i / 3))  # text y축
+                    pos_x = 8  # text x축
+                    if i % 3 == 0:
+                        pos_x = 8
+                    elif i % 3 == 1:
+                        pos_x = 100
+                    else:
+                        pos_x = 192
+
                     can.drawString(pos_x, pos_y, write_text)
-                    i = i + 1
+
+                    if len(write_text) >= 19:
+                        i = i + 2
+                    else:
+                        i = i + 1
 
                 can.save()
                 packet.seek(0)
