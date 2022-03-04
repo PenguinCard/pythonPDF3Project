@@ -168,6 +168,9 @@ def main():
                     else:
                         can.setFont("D2Coding", 5)  # 폰트종류: D2Coding, 폰트크기: 5
 
+                    if len(write_text) >= 19 and i % 3 == 1:
+                        i = i + 1
+
                     pos_y = 587.5 - (11 * math.floor(i / 3))  # text y축
                     pos_x = 8  # text x축
                     if i % 3 == 0:
