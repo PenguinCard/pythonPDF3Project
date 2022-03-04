@@ -136,11 +136,14 @@ def main():
                         print(df2.rdd.take(1))
                         row_data = df2.rdd.take(1)[0]
                         data_text = "{} ({})".format(row_data.NAME, row_data.CODE)
+                        if not row_data.CODE:
+                            data_text = "{}".format(row_data.NAME)
                         if data_text in products:
                             products[data_text] = products[data_text] + 1
                         else:
                             products[data_text] = 1
-                    except:
+                    except Exception as e:
+                        print(e)
                         continue
 
                 packet = io.BytesIO()
@@ -153,7 +156,7 @@ def main():
                 i = 0  # 딕셔너리 index
                 for key, value in products.items():
                     pos_y = 587.5 - (11 * math.floor(i / 3))  # text y축
-                    pos_x = 8  # text x축
+                    pos_x = 8                                 # text x축
                     if i % 3 == 0:
                         pos_x = 8
                     elif i % 3 == 1:
